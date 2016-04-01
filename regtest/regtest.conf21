@@ -1,0 +1,107 @@
+export VIRT_NUM=5
+export VIRT_CPUS=4
+export VIRT_MEM=16384
+export VIRT_DISK=200G
+
+export SWITCH_IPS="1.1.1.1"
+#export SWITCH_CREDENTIAL="version=2c,community=public"
+export SWITCH_VERSION=${SWITCH_VERSION:-'2c'}
+export SWITCH_COMMUNITY=${SWITCH_COMMUNITY:-'public'}
+export SWITCH_CREDENTIAL=${SWITCH_CREDENTIAL:-"version=${SWITCH_VERSION},community=${SWITCH_COMMUNITY}"}
+export DEPLOYMENT_TIMEOUT="150"
+export POLL_SWITCHES_FLAG="nopoll_switches"
+
+export USE_POLL_SWITCHES=${USE_POLL_SWITCHES:-false}
+export OS_VERSION=${OS_VERSION:-"trusty"}
+export ADAPTER_OS_PATTERN=${ADAPTER_OS_PATTERN:-'(?i)ubuntu-14\.04\.3.*'}
+export OPENSTACK_VERSION=${OPENSTACK_VERSION:-"liberty"}
+export ADAPTER_TARGET_SYSTEM_PATTERN="^openstack$"
+export MGMT_IP=${MGMT_IP:-10.145.81.212}
+export MGMT_MASK=${MGMT_MASK:-255.255.255.0}
+export MGMT_GW=${MGMT_GW:-10.145.81.1}
+
+export REPO_NAME="$OS_VERSION-$OPENSTACK_VERSION-ppa"
+export ADAPTER_NAME="openstack_$OPENSTACK_VERSION"
+export ADAPTER_FLAVOR_PATTERN="HA-ansible-multinodes-$OPENSTACK_VERSION"
+
+export DEFAULT_ROLES=""
+export VIP="10.1.0.222"
+export INSTALL_IP=${INSTALL_IP:-10.1.0.1}
+export INSTALL_MASK=${INSTALL_MASK:-255.255.255.0}
+export INSTALL_GW=${INSTALL_GW:-10.1.0.1}
+export INSTALL_IP_START=${INSTALL_IP_START:-10.1.0.10}
+export INSTALL_IP_END=${INSTALL_IP_END:-10.1.0.254}
+export EXTERNAL_NIC=${EXTERNAL_NIC:-br0}
+export CLUSTER_NAME="opnfv2"
+export DOMAIN="ods.com"
+export PARTITIONS="/=30%,/home=5%,/tmp=5%,/var=60%"
+export SUBNETS="10.1.0.0/24,172.16.2.0/24,172.16.3.0/24,172.16.4.0/24"
+
+export MANAGEMENT_IP_START=${MANAGEMENT_IP_START:-'10.1.0.50'}
+export MANAGEMENT_INTERFACE=${MANAGEMENT_INTERFACE:-'br_install'}
+export DASHBOARD_URL="http://10.145.81.189/horizon"
+export ENABLE_SECGROUP=${ENABLE_SECGROUP:-"true"}
+export ENABLE_VPNAAS="false"
+export ENABLE_FWAAS="false"
+export NEUTRON_CFG="/opt/compass/bin/conf/neutron_cfg.yaml"
+export NETWORK_CFG=/opt/compass/bin/conf/network_cfg.yaml 
+export HOSTNAMES="host1,host2,host3,host4,host5,"
+export HOST_ROLES="host1=controller,ha;host2=controller,ha;host3=controller,ha;host4=compute;host5=compute"
+function next_ip {
+    ip_addr=$1
+    ip_base="$(echo $ip_addr | cut -d. -f'1 2 3')"
+    ip_last="$(echo $ip_addr | cut -d. -f4)"
+    let ip_last_next=$ip_last+1
+    echo "${ip_base}.${ip_last_next}"
+}
+
+if [ -z "$HOST_NETWORKS" ]; then
+    IFS="," read -a HOSTNAME_LIST <<< "$HOSTNAMES"
+    read=$HOSTNAMES
+    MANAGE_IP=${MANAGEMENT_IP_START}
+    TENANT_IP=${TENANT_IP_START}
+    PUBLIC_IP=${PUBLIC_IP_START}
+    STORAGE_IP=${STORAGE_IP_START}
+    for HOSTNAME in ${HOSTNAME_LIST[@]}; do
+        if [ -z "$HOST_NETWORKS" ]; then
+            HOST_NETWORKS="${HOSTNAME}:${MANAGEMENT_INTERFACE}=${MANAGE_IP}|is_mgmt"
+        else
+            HOST_NETWORKS="${HOST_NETWORKS};${HOSTNAME}:${MANAGEMENT_INTERFACE}=${MANAGE_IP}|is_mgmt"
+        fi
+        MANAGE_IP=$(next_ip ${MANAGE_IP})
+        TENANT_IP=$(next_ip ${TENANT_IP})
+        PUBLIC_IP=$(next_ip ${PUBLIC_IP})
+        STORAGE_IP=$(next_ip ${STORAGE_IP})
+    done
+    export HOST_NETWORKS
+fi
+
+export NETWORK_MAPPING=${NETWORK_MAPPING:-"install=${MANAGEMENT_INTERFACE}"}
+export HOSTNAMES="host1,host2,host3,host4,host5"
+export PROXY=""
+export IGNORE_PROXY=""
+export SEARCH_PATH="ods.com"
+export GATEWAY="10.1.0.1"
+export SERVER_CREDENTIAL="root=root"
+export LOCAL_REPO_URL=""
+export OS_CONFIG_FILENAME=""
+export SERVICE_CREDENTIALS="image:service=service,compute:service=service,dashboard:service=service,identity:service=service,image:service=service,metering:service=service,network:service=service,rabbitmq:service=service,volume:service=service,mysql:service=service,heat:heat=heat_db_secret"
+export CONSOLE_CREDENTIALS="admin:console=console,demo:console=console,compute:console=console,dashboard:console=console,identity:console=console,image:console=console,metering:console=console,network:console=console,object-store:console=console,volume:console=console,heat:heat=heat_secret"
+export PACKAGE_CONFIG_FILENAME=""
+export COMPASS_VIRT_CPUS=4
+export COMPASS_VIRT_MEM=4096
+export COMPASS_SERVER=$INSTALL_IP
+export COMPASS_SERVER_URL="http://$MGMT_IP/api"
+export HTTP_SERVER_URL="http://$MGMT_IP/api"
+export COMPASS_USER_EMAIL="admin@huawei.com"
+export COMPASS_USER_PASSWORD="admin"
+export COMPASS_DNS1=${COMPASS_DNS1:-'8.8.8.8'}
+export COMPASS_DNS2=${COMPASS_DNS2:-}
+export COMPASS_EXTERNAL_IP=${COMPASS_EXTERNAL_IP:-'10.145.81.212'}
+export COMPASS_EXTERNAL_MASK=${COMPASS_EXTERNAL_MASK:-'255.255.255.0'}
+export COMPASS_EXTERNAL_GW=${COMPASS_EXTERNAL_GW:-'10.145.81.1'}
+export LANGUAGE="EN"
+export TIMEZONE="America/Los_Angeles"
+export NTP_SERVER="$COMPASS_SERVER"
+export NAMESERVERS="$COMPASS_SERVER"
+

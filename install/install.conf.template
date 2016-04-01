@@ -15,13 +15,13 @@ export PACKAGE_INSTALLER=chef
 export REMI=http://rpms.famillecollet.com/enterprise/remi-release-6.rpm
 
 # service NIC (A bridge "installation" is used for jenkins CI)
-export NIC=installation
+export NIC=br_install
 
 # default local repo config is "n"
 export LOCAL_REPO=${LOCAL_REPO:-"y"}
 
 export SUPPORT_CENTOS_7_2=${SUPPORT_CENTOS_7_2:-"y"}
-export SUPPORT_UBUNTU_14_04_03=${SUPPORT_UBUNTU_14_04_03:-"y"}
+export SUPPORT_UBUNTU_14_04_03=${SUPPORT_UBUNTU_14_04_03:-"n"}
 
 # DHCP config
 export IPADDR=$(ifconfig $NIC | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}')
@@ -48,8 +48,10 @@ export NAMESERVER_DOMAINS=ods.com
 export NAMESERVER_REVERSE_ZONES=unused
 
 # the repo url
-export WEB_SOURCE='http://git.openstack.org/openstack'/compass-web
-export ADAPTERS_SOURCE='http://git.openstack.org/openstack/compass-adapters'
+export WEB_SOURCE='http://git.openstack.org/openstack/compass-web'
+#export ADAPTERS_SOURCE='http://git.openstack.org/openstack/compass-adapters'
+#export ADAPTERS_SOURCE='https://gerrit.opnfv.org/gerrit/compass4nfv'
+export ADAPTERS_SOURCE='https://github.com/leah03/compass4nfv'
 # set the default cobbler user "cobbler" password, if not set, the default will be cobbler/cobbler
 export CBLR_USER=cobbler
 export CBLR_PASSWD=cobbler

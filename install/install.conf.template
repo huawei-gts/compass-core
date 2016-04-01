@@ -64,7 +64,7 @@ export JS_MVC=javascriptmvc-3.2.4
 export CHEF_PASSWD=root1234
 
 # Set Compass-web and Compass-adpater variables
-ess-adaptersxport WEB_HOME=${WEB_HOME:-'/tmp/web'}
+export WEB_HOME=${WEB_HOME:-'/tmp/web'}
 export ADAPTERS_HOME=${ADAPTERS_HOME:-'/tmp/adapter'}
 export SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 export COMPASSDIR=${SCRIPT_DIR}/..
